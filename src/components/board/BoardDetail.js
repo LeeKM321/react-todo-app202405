@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
 import {
+  createSearchParams,
   useNavigate,
   useParams,
   useSearchParams,
 } from 'react-router-dom';
 
 const BoardDetail = () => {
+  const navigate = useNavigate();
+
   // 경로 상에 붙은 변수정보(path variable)을 가져오는 방법.
   // ex) /board/detail/{data}
   const { id } = useParams();
@@ -13,15 +16,23 @@ const BoardDetail = () => {
   // 요청과 함께 전달된 쿼리스트링을 가져오는 방법.
   // ex) /board/list?page=2&size=10
   const [searchParams] = useSearchParams();
+  console.log(
+    'searchParams in BoardDetail: ',
+    searchParams,
+  );
+
   const page = searchParams.get('page') || 1;
   const size = searchParams.get('size') || 10;
-
-  const navigate = useNavigate();
+  const pageParam = createSearchParams({
+    page,
+    size,
+  }).toString();
 
   const goToList = () => {
     // navigate(`/board/list?page=${page}&size=${size}`);
-    navigate('/board/list', {
-      search: `page=${page}&size=${size}`,
+    navigate({
+      pathname: '/board/list',
+      search: pageParam,
     });
   };
 
